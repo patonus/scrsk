@@ -30,8 +30,9 @@
 
             </div>
             <!-- Navbar Right Side -->
-            <div class="navbar-nav">
+            <div class="navbar-nav align-items-center">
               {% if user.is_authenticated %}
+                <span class="logged-in-user-info mx-2">Jesteś zalogowany jako {{ user.username }}</span>
                 <a class="nav-item nav-link" href="{% url 'post-create' %}">Dodaj</a>
                 <a class="nav-item nav-link" href="{% url 'logout' %}">Wyloguj się</a>
 
@@ -45,6 +46,13 @@
       </nav>
     </header>
     <main role="main" class="container">
+      <div class="row my-3">
+        <span class="pr-2">Sortuj od</span>
+        <select onchange="onSortingTypeChange(this)">
+          <option value="date_descending"{% if descending_dates %} selected{% endif %}>Najnowszych</option>
+          <option value="date_ascending"{% if not descending_dates %} selected{% endif %}>Najstarszych</option>
+        </select>
+      </div>
       <div class="row">
         <div class="col-md-8">
           {% if messages %}
@@ -76,5 +84,17 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script>
+    function onSortingTypeChange(node) {
+      const descendingOrder = 0;
+      if (node.selectedIndex == descendingOrder) {
+        location.href = "{% url 'blog-home' %}";
+      }
+      else {
+        location.href = "{% url 'blog-home-oldest-first' %}";
+      }
+    }
+    </script>
 </body>
 </html>

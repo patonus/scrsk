@@ -82,3 +82,8 @@ a.article-title:hover {
 .account-heading {
   font-size: 2.5rem;
 }
+
+.logged-in-user-info {
+  color: #dddddd;
+  font-size: 0.7em;
+}
