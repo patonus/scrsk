@@ -46,6 +46,7 @@
       </nav>
     </header>
     <main role="main" class="container">
+      {% if descending_dates != None %}
       <div class="row my-3">
         <span class="pr-2">Sortuj od</span>
         <select onchange="onSortingTypeChange(this)">
@@ -53,6 +54,7 @@
           <option value="date_ascending"{% if not descending_dates %} selected{% endif %}>Najstarszych</option>
         </select>
       </div>
+      {% endif %}
       <div class="row">
         <div class="col-md-8">
           {% if messages %}
