@@ -15,15 +15,35 @@
 {% endblock content %}
 
 {% block options %}
-<div class="row my-3">
-  <form action="{% url 'blog-home' %}" method="GET" id="sorting_form">
-    <span class="text-muted pr-2">Sortuj od</span>
-    <select name="ascending" onchange="document.getElementById('sorting_form').submit()">
-      <option value="false" {% if not ascending_dates %} selected{% endif %}>Najnowszych</option>
-      <option value="true" {% if ascending_dates %} selected{% endif %}>Najstarszych</option>
-    </select>
-  </form>
+<form action="{% url 'blog-home' %}" method="GET" id="sorting_form">
+<div class="row d-flex justify-content-between align-items-end mb-3">
+    <div>
+      <label class="text-muted" for="{{ form.ascending_order.id_for_label }}">{{ form.ascending_order.label }}</label>
+      {{ form.ascending_order }}
+    </div>
+    <div>
+      {{ form.search_pattern }}
+      <input type="submit" value="Szukaj"><br>
+      <div class="d-flex flex-nowrap justify-content-center align-items-center mt-1 text-muted">
+        <div class="pr-2">Wyszukuj po:</div>
+        <div class="font-search">
+          {{ form.search_title }}Tytule<br>
+          {{ form.search_author }}Autorze
+        </div>
+      </div>
+    </div>
 </div>
+</form>
 {% endblock options %}
+
+{% block custom_scripts %}
+<script>
+    $(function() {
+        $('#{{ form.ascending_order.auto_id }}').on('change', function() {
+            $('#sorting_form').submit();
+        });
+    })
+</script>
+{% endblock custom_scripts %}
 
 {#TODO: przetlumaczyc na polski#}

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .models import Post
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib import messages
 from django.views.generic import (
     ListView,
     DetailView,
@@ -9,24 +10,42 @@ from django.views.generic import (
     DeleteView
 )
 from .models import Post
+from .forms import SearchOptionsForm
 
 
 class PostListView(ListView):
     model = Post
     template_name = 'blog/home.html'
     context_object_name = 'posts'
+    ordering = ['-date_posted']
 
     def get(self, request, *args, **kwargs):
-        self.ascending_order = request.GET.get('ascending') == 'true'
-        if self.ascending_order:
+        self.form = SearchOptionsForm(request.GET)
+        if self.form.is_valid() and self.form.cleaned_data.get('ascending_order') == 'true':
             self.ordering = ['date_posted']
-        else:
-            self.ordering = ['-date_posted']
         return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        query_set = Post.objects.all()
+        if self.form.is_valid():
+            request_params = self.form.cleaned_data
+            pattern = request_params.get('search_pattern')
+            by_title, by_author = request_params.get('search_title'), request_params.get('search_author')
+            if pattern:
+                query_set = Post.objects.none()
+                if not by_author and not by_author:
+                    by_title = True
+                if by_title:
+                    query_set = query_set | Post.objects.filter(title__icontains=pattern)
+                if by_author:
+                    query_set = query_set | Post.objects.filter(author__username__icontains=pattern)
+        if not query_set:
+            messages.info(self.request, 'No posts found')
+        return query_set.order_by(self.ordering[0])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['ascending_dates'] = self.ascending_order
+        context['form'] = self.form
         return context
 
 
