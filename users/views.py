@@ -3,7 +3,6 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.views.generic import DetailView
 from .forms import CustomUserCreationForm
-from blog.models import Post
 
 
 def register(request):
