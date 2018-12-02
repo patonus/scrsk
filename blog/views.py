@@ -33,12 +33,12 @@ class PostListView(ListView):
             by_title, by_author = request_params.get('search_title'), request_params.get('search_author')
             if pattern:
                 query_set = Post.objects.none()
-                if not by_author and not by_author:
+                if not by_author:
                     by_title = True
+                else:
+                    query_set = query_set | Post.objects.filter(author__username__icontains=pattern)
                 if by_title:
                     query_set = query_set | Post.objects.filter(title__icontains=pattern)
-                if by_author:
-                    query_set = query_set | Post.objects.filter(author__username__icontains=pattern)
         if not query_set:
             messages.info(self.request, 'No posts found')
         return query_set.order_by(self.ordering[0])
