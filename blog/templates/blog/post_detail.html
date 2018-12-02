@@ -15,6 +15,33 @@
       </div>
       <h2 class="article-title">{{ object.title }}</h2>
       <p class="article-content">{{ object.content }}</p>
+
+      <div class="container py-4 border-top">
+        <h3>Dodaj komentarz:</h3>
+        <form action="{% url 'post-comment' object.id %}" method="post">
+          {% csrf_token %}
+          <textarea class="w-100" name="comment"></textarea>
+          <div class="d-flex justify-content-end">
+            <input type="submit" class="btn btn-secondary" value="Prześlij">
+          </div>
+        </form>
+      </div>
+
+      <div class="container py-4 border-top">
+        <h3>Komentarze użytkowników:</h3>
+        <article class="media content-section flex-column">
+          {% if object.comment_set.all %}
+            {% for comment in object.comment_set.all %}
+              <div class="media-body border-bottom py-2 w-100">
+                <p class="my-0">{{ comment.content }} - <a href="#">{{ comment.author.username }}</a>
+                <small class="text-muted">{{ comment.date_posted|date:"j E, Y G:i" }}</small></p>
+              </div>
+            {% endfor %}
+          {% else %}
+          <strong>Brak komentarzy pod tym postem</strong>
+          {% endif %}
+        </article>
+      </div>
     </div>
   </article>
 {% endblock content %}

@@ -1,7 +1,6 @@
-from django.shortcuts import render
-from .models import Post
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.views.generic import (
     ListView,
     DetailView,
@@ -9,7 +8,9 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
-from .models import Post
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from .models import Post, Comment
 from .forms import SearchOptionsForm
 
 
@@ -91,3 +92,15 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         if self.request.user == post.author:
             return True
         return False
+
+
+@login_required(login_url='/login/')
+def comment_post_view(request, pk):
+    if request.method == 'POST':
+        comment_content = request.POST.get('comment')
+        if not comment_content.strip():
+            messages.warning(request, 'Cannot add empty comment')
+        else:
+            comment = Comment(content=comment_content, author=request.user, post=Post.objects.get(pk=pk))
+            comment.save()
+    return HttpResponseRedirect(reverse('post-detail', args=(pk,)))

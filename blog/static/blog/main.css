@@ -91,3 +91,8 @@ a.article-title:hover {
 .font-search {
   font-size: 0.9em;
 }
+
+.comment {
+  background-color: DeepSkyBlue;
+  text-color: #eeeeee
+}
