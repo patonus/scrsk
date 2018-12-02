@@ -36,7 +36,7 @@ class PostListView(ListView):
                 if not by_author:
                     by_title = True
                 else:
-                    query_set = query_set | Post.objects.filter(author__username__icontains=pattern)
+                    query_set = query_set | Post.objects.filter(author__username=pattern)
                 if by_title:
                     query_set = query_set | Post.objects.filter(title__icontains=pattern)
         if not query_set:
