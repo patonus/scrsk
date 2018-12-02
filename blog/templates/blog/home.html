@@ -14,4 +14,16 @@
     {% endfor %}
 {% endblock content %}
 
+{% block options %}
+<div class="row my-3">
+  <form action="{% url 'blog-home' %}" method="GET" id="sorting_form">
+    <span class="text-muted pr-2">Sortuj od</span>
+    <select name="ascending" onchange="document.getElementById('sorting_form').submit()">
+      <option value="false" {% if not ascending_dates %} selected{% endif %}>Najnowszych</option>
+      <option value="true" {% if ascending_dates %} selected{% endif %}>Najstarszych</option>
+    </select>
+  </form>
+</div>
+{% endblock options %}
+
 {#TODO: przetlumaczyc na polski#}

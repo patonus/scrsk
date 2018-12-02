@@ -15,11 +15,18 @@ class PostListView(ListView):
     model = Post
     template_name = 'blog/home.html'
     context_object_name = 'posts'
-    ordering = ['-date_posted']
+
+    def get(self, request, *args, **kwargs):
+        self.ascending_order = request.GET.get('ascending') == 'true'
+        if self.ascending_order:
+            self.ordering = ['date_posted']
+        else:
+            self.ordering = ['-date_posted']
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['descending_dates'] = self.ordering[0] == '-date_posted'
+        context['ascending_dates'] = self.ascending_order
         return context
 
 
