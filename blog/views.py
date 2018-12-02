@@ -1,6 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.db.models import Count, F
 from django.views.generic import (
     ListView,
     DetailView,
@@ -53,6 +55,12 @@ class PostListView(ListView):
 class PostDetailView(DetailView):
     model = Post
 
+    def get(self, request, *args, **kwargs):
+        post = Post.objects.get(pk=kwargs['pk'])
+        post.visits = F('visits') + 1
+        post.save()
+        return super().get(request, *args, **kwargs)
+
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     login_url = '/login/'
@@ -92,6 +100,29 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         if self.request.user == post.author:
             return True
         return False
+
+
+class SidebarView(ListView):
+    context_object_name = 'object_list'
+
+    def get(self, request, *args, **kwargs):
+        self.query = request.GET.get('query')
+        if self.query:
+            if self.query in ('most_popular_list', 'most_commented_list'):
+                self.model = Post
+                self.template_name = 'blog/sidebar_posts_view.html'
+            elif self.query in ('top_users_list',):
+                self.model = User
+                self.template_name = 'blog/sidebar_users_view.html'
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        if self.query == 'most_popular_list':
+            return Post.objects.order_by('-visits')[:5]
+        if self.query == 'most_commented_list':
+            return Post.objects.all().annotate(num_comments=Count('comment')).order_by('-num_comments')[:5]
+        if self.query == 'top_users_list':
+            return User.objects.all().annotate(num_posts=Count('post')).order_by('-num_posts')[:5]
 
 
 @login_required(login_url='/login/')

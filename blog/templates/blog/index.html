@@ -1,84 +1,139 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
+
 <head>
 
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
 
-    <link rel="stylesheet" type="text/css" href="{% static 'blog/main.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'blog/main.css' %}">
 
 
-        <title>kfgjgfhxs </title>
+  <title>kfgjgfhxs </title>
 
 </head>
+
 <body>
-    <header class="site-header">
-      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
-        <div class="container">
-{#        TODO: Wybrac nazwe#}
-          <a class="navbar-brand mr-4" href="{% url 'blog-home' %}">kfgjgfhxs</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+  <header class="site-header">
+    <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+      <div class="container">
+        {# TODO: Wybrac nazwe#}
+        <a class="navbar-brand mr-4" href="{% url 'blog-home' %}">kfgjgfhxs</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle"
+          aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarToggle">
-            <div class="navbar-nav mr-auto">
+        </button>
+        <div class="collapse navbar-collapse" id="navbarToggle">
+          <div class="navbar-nav mr-auto">
 
-            </div>
-            <!-- Navbar Right Side -->
-            <div class="navbar-nav align-items-center">
-              {% if user.is_authenticated %}
-                <span class="logged-in-user-info mx-2">Jesteś zalogowany jako {{ user.username }}</span>
-                <a class="nav-item nav-link" href="{% url 'post-create' %}">Dodaj</a>
-                <a class="nav-item nav-link" href="{% url 'logout' %}">Wyloguj się</a>
-
-              {% else %}
-                <a class="nav-item nav-link" href="{% url 'login' %}">Zaloguj się</a>
-                <a class="nav-item nav-link" href="{% url 'register' %}">Załóż konto</a>
-              {% endif %}
-            </div>
           </div>
-        </div>
-      </nav>
-    </header>
-    <main role="main" class="container">
-      {% block options %}{% endblock %}
-      <div class="row">
-        <div class="col-md-8">
-          {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-          {%  endif %}
-          {% block content %}{% endblock %}
-        </div>
-{#      TODO Zaimplementowac sidebar#}
-        <div class="col-md-4">
-          <div class="content-section">
-            <h3>Our Sidebar</h3>
-            <p class='text-muted'>You can put any information here you'd like.
-              <ul class="list-group">
-                <li class="list-group-item list-group-item-light">Latest Posts</li>
+          <!-- Navbar Right Side -->
+          <div class="navbar-nav align-items-center">
+            {% if user.is_authenticated %}
+            <span class="logged-in-user-info mx-2">Jesteś zalogowany jako {{ user.username }}</span>
+            <a class="nav-item nav-link" href="{% url 'post-create' %}">Dodaj</a>
+            <a class="nav-item nav-link" href="{% url 'logout' %}">Wyloguj się</a>
 
-              </ul>
-            </p>
+            {% else %}
+            <a class="nav-item nav-link" href="{% url 'login' %}">Zaloguj się</a>
+            <a class="nav-item nav-link" href="{% url 'register' %}">Załóż konto</a>
+            {% endif %}
           </div>
         </div>
       </div>
-    </main>
+    </nav>
+  </header>
+  <main role="main" class="container">
+    {% block options %}{% endblock %}
+    <div class="row">
+      <div class="col-md-8">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+          {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% block content %}{% endblock %}
+      </div>
+      <div class="col-md-4">
+        <div class="accordion" id="sidebar">
+          <div class="card">
+            <div class="card-header" id="most_popular">
+              <h5 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#most_popular_list"
+                  aria-expanded="false" aria-controls="most_popular_list" onclick="sidebarClickHandler(this)">
+                  Najpopularniejsze posty
+                </button>
+              </h5>
+            </div>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+            <div id="most_popular_list" class="collapse" aria-labelledby="most_popular" data-parent="#sidebar">
+              <div class="card-body">
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="most_commented">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#most_commented_list"
+                  aria-expanded="false" aria-controls="most_commented_list" onclick="sidebarClickHandler(this)">
+                  Najczęściej komentowane posty
+                </button>
+              </h5>
+            </div>
+            <div id="most_commented_list" class="collapse" aria-labelledby="most_commented" data-parent="#sidebar">
+              <div class="card-body">
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="top_users">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#top_users_list"
+                  aria-expanded="false" aria-controls="top_users_list" onclick="sidebarClickHandler(this)">
+                  Najaktywniejsi użytkownicy
+                </button>
+              </h5>
+            </div>
+            <div id="top_users_list" class="collapse" aria-labelledby="top_users" data-parent="#sidebar">
+              <div class="card-body">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
 
-    {% block custom_scripts %}{% endblock %}
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+
+  <script>
+    function sidebarClickHandler(btn) {
+      const queryType = $(btn).attr('aria-controls');
+      let ajaxData = {
+        url: '{% url 'sidebar' %}',
+        data: { query: queryType }
+      };
+      $.ajax(ajaxData).done(function(received) {
+        $('#' + queryType).children().html(received);
+      });
+    }
+  </script>
+
+  {% block custom_scripts %}{% endblock %}
 </body>
+
 </html>

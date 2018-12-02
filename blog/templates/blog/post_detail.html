@@ -17,6 +17,9 @@
 
       <div class="container py-4 border-top">
         <h3>Dodaj komentarz:</h3>
+        {% if not user.is_authenticated %}
+          <p><small>*Musisz być zalogowany, aby dodać komentarz</small></p>
+        {% endif %}
         <form action="{% url 'post-comment' object.id %}" method="post">
           {% csrf_token %}
           <textarea class="w-100" name="comment"></textarea>

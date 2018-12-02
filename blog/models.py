@@ -9,6 +9,7 @@ class Post(models.Model):
     content = models.TextField()
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    visits = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['-date_posted']
