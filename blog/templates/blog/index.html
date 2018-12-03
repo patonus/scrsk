@@ -67,7 +67,7 @@
           <div class="card">
             <div class="card-header" id="most_popular">
               <h5 class="mb-0">
-                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#most_popular_list"
+                <button class="btn btn-link" type="button" data-target="#most_popular_list"
                   aria-expanded="false" aria-controls="most_popular_list" onclick="sidebarClickHandler(this)">
                   Najpopularniejsze posty
                 </button>
@@ -82,7 +82,7 @@
           <div class="card">
             <div class="card-header" id="most_commented">
               <h5 class="mb-0">
-                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#most_commented_list"
+                <button class="btn btn-link collapsed" type="button" data-target="#most_commented_list"
                   aria-expanded="false" aria-controls="most_commented_list" onclick="sidebarClickHandler(this)">
                   Najczęściej komentowane posty
                 </button>
@@ -96,7 +96,7 @@
           <div class="card">
             <div class="card-header" id="top_users">
               <h5 class="mb-0">
-                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#top_users_list"
+                <button class="btn btn-link collapsed" type="button" data-target="#top_users_list"
                   aria-expanded="false" aria-controls="top_users_list" onclick="sidebarClickHandler(this)">
                   Najaktywniejsi użytkownicy
                 </button>
@@ -123,12 +123,20 @@
   <script>
     function sidebarClickHandler(btn) {
       const queryType = $(btn).attr('aria-controls');
+      const target = $('#' + queryType);
+
+      if (target.hasClass('show')) {
+        target.collapse('toggle');
+        return;
+      }
+
       let ajaxData = {
         url: '{% url 'sidebar' %}',
         data: { query: queryType }
       };
       $.ajax(ajaxData).done(function(received) {
-        $('#' + queryType).children().html(received);
+        target.children().html(received);
+        target.collapse('toggle');
       });
     }
   </script>
