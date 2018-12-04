@@ -25,7 +25,11 @@ SECRET_KEY = 'i$2r0q$l_91%6&08m&qtq-2szeu&&9c@_b)u4=s&9@m^il0#e)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '::1',
+]
 
 
 # Application definition
@@ -61,8 +65,7 @@ ROOT_URLCONF = 'scrsk.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -130,3 +133,5 @@ STATIC_URL = '/static/'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = 'blog-home'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')

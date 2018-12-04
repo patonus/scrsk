@@ -32,16 +32,12 @@ class PostListView(ListView):
         query_set = Post.objects.all()
         if self.form.is_valid():
             request_params = self.form.cleaned_data
-            pattern = request_params.get('search_pattern')
-            by_title, by_author = request_params.get('search_title'), request_params.get('search_author')
-            if pattern:
-                query_set = Post.objects.none()
-                if not by_author:
-                    by_title = True
-                else:
-                    query_set = query_set | Post.objects.filter(author__username=pattern)
-                if by_title:
-                    query_set = query_set | Post.objects.filter(title__icontains=pattern)
+            title_pattern = request_params.get('title')
+            if title_pattern:
+                query_set = query_set.filter(title__icontains=title_pattern)
+            author = request_params.get('author')
+            if author:
+                query_set = query_set.filter(author__username=author)
         if not query_set:
             messages.info(self.request, 'No posts found')
         return query_set.order_by(self.ordering[0])
@@ -132,6 +128,7 @@ def comment_post_view(request, pk):
         if not comment_content.strip():
             messages.warning(request, 'Cannot add empty comment')
         else:
-            comment = Comment(content=comment_content, author=request.user, post=Post.objects.get(pk=pk))
+            comment = Comment(content=comment_content,
+                              author=request.user, post=Post.objects.get(pk=pk))
             comment.save()
     return HttpResponseRedirect(reverse('post-detail', args=(pk,)))

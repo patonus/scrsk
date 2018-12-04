@@ -1,49 +1,50 @@
 {% extends "blog/index.html" %}
 {% block content %}
-  <article class="media content-section">
-    <div class="media-body">
-      <div class="article-metadata">
-        <a class="mr-2" href="{% url 'users:user' object.author.id %}">{{ object.author }}</a>
-        <small class="text-muted">{{ object.date_posted|date:"j E, Y G:i" }}</small>
-        {% if object.author == user %}
-          <div>
-            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' object.id %}">Edytuj</a>
-            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' object.id %}">Usuń</a>
-          </div>
-        {% endif %}
+<article class="media content-section">
+  <div class="col-md-12 media-body" style="word-wrap: break-word;">
+    <div class="article-metadata">
+      <a class="mr-2" href="{% url 'users:user' object.author.id %}">{{ object.author }}</a>
+      <small class="text-muted">{{ object.date_posted|date:"j E, Y G:i" }}</small>
+      {% if object.author == user %}
+      <div>
+        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' object.id %}">Edytuj</a>
+        <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' object.id %}">Usuń</a>
       </div>
-      <h2 class="article-title">{{ object.title }}</h2>
-      <p class="article-content">{{ object.content }}</p>
-
-      <div class="container py-4 border-top">
-        <h3>Dodaj komentarz:</h3>
-        {% if not user.is_authenticated %}
-          <p><small>*Musisz być zalogowany, aby dodać komentarz</small></p>
-        {% endif %}
-        <form action="{% url 'post-comment' object.id %}" method="post">
-          {% csrf_token %}
-          <textarea class="w-100" name="comment"></textarea>
-          <div class="d-flex justify-content-end">
-            <input type="submit" class="btn btn-secondary" value="Prześlij">
-          </div>
-        </form>
-      </div>
-
-      <div class="container py-4 border-top">
-        <h3>Komentarze użytkowników:</h3>
-        <article class="media content-section flex-column">
-          {% if object.comment_set.all %}
-            {% for comment in object.comment_set.all %}
-              <div class="media-body border-bottom py-2 w-100">
-                <p class="my-0">{{ comment.content }} - <a href="#">{{ comment.author.username }}</a>
-                <small class="text-muted">{{ comment.date_posted|date:"j E, Y G:i" }}</small></p>
-              </div>
-            {% endfor %}
-          {% else %}
-          <strong>Brak komentarzy pod tym postem</strong>
-          {% endif %}
-        </article>
-      </div>
+      {% endif %}
     </div>
-  </article>
+    <h2 class="article-title">{{ object.title }}</h2>
+    <p class="article-content">{{ object.content }}</p>
+
+    <div class="container py-4 border-top">
+      <h3>Dodaj komentarz:</h3>
+      {% if not user.is_authenticated %}
+      <p><small>*Musisz być zalogowany, aby dodać komentarz</small></p>
+      {% endif %}
+      <form action="{% url 'post-comment' object.id %}" method="post">
+        {% csrf_token %}
+        <textarea class="w-100" name="comment"></textarea>
+        <div class="d-flex justify-content-end">
+          <input type="submit" class="btn btn-secondary" value="Prześlij">
+        </div>
+      </form>
+    </div>
+
+    <div class="container py-4 border-top">
+      <h3>Komentarze użytkowników:</h3>
+      <article class="media content-section flex-column">
+        {% if object.comment_set.all %}
+        {% for comment in object.comment_set.all %}
+        <div class="media-body border-bottom py-2 w-100">
+          <p class="my-0">{{ comment.content }} - <a href="{% url 'users:user' comment.author.id %}">
+              {{ comment.author.username }}</a>
+            <small class="text-muted">{{ comment.date_posted|date:"j E, Y G:i" }}</small></p>
+        </div>
+        {% endfor %}
+        {% else %}
+        <strong>Brak komentarzy pod tym postem</strong>
+        {% endif %}
+      </article>
+    </div>
+  </div>
+</article>
 {% endblock content %}

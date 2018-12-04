@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="{% static 'blog/main.css' %}">
 
 
-  <title>kfgjgfhxs </title>
+  <title>Twarzoksiążka</title>
 
 </head>
 
@@ -23,8 +23,7 @@
   <header class="site-header">
     <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
       <div class="container">
-        {# TODO: Wybrac nazwe#}
-        <a class="navbar-brand mr-4" href="{% url 'blog-home' %}">kfgjgfhxs</a>
+        <a class="navbar-brand mr-4" href="{% url 'blog-home' %}">Twarzoksiążka</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle"
           aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -67,8 +66,8 @@
           <div class="card">
             <div class="card-header" id="most_popular">
               <h5 class="mb-0">
-                <button class="btn btn-link" type="button" data-target="#most_popular_list"
-                  aria-expanded="false" aria-controls="most_popular_list" onclick="sidebarClickHandler(this)">
+                <button class="btn btn-link" type="button" data-target="#most_popular_list" aria-expanded="false"
+                  aria-controls="most_popular_list" onclick="sidebarClickHandler(this)">
                   Najpopularniejsze posty
                 </button>
               </h5>
@@ -82,8 +81,8 @@
           <div class="card">
             <div class="card-header" id="most_commented">
               <h5 class="mb-0">
-                <button class="btn btn-link collapsed" type="button" data-target="#most_commented_list"
-                  aria-expanded="false" aria-controls="most_commented_list" onclick="sidebarClickHandler(this)">
+                <button class="btn btn-link collapsed" type="button" data-target="#most_commented_list" aria-expanded="false"
+                  aria-controls="most_commented_list" onclick="sidebarClickHandler(this)">
                   Najczęściej komentowane posty
                 </button>
               </h5>
@@ -96,8 +95,8 @@
           <div class="card">
             <div class="card-header" id="top_users">
               <h5 class="mb-0">
-                <button class="btn btn-link collapsed" type="button" data-target="#top_users_list"
-                  aria-expanded="false" aria-controls="top_users_list" onclick="sidebarClickHandler(this)">
+                <button class="btn btn-link collapsed" type="button" data-target="#top_users_list" aria-expanded="false"
+                  aria-controls="top_users_list" onclick="sidebarClickHandler(this)">
                   Najaktywniejsi użytkownicy
                 </button>
               </h5>
@@ -134,7 +133,7 @@
         url: '{% url 'sidebar' %}',
         data: { query: queryType }
       };
-      $.ajax(ajaxData).done(function(received) {
+      $.ajax(ajaxData).done(function (received) {
         target.children().html(received);
         target.collapse('toggle');
       });

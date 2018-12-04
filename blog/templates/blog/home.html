@@ -1,49 +1,40 @@
 {% extends "blog/index.html" %}
 {% block content %}
-    {% for post in posts %}
-        <article class="media content-section">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="{% url 'users:user' post.author.id %}">{{ post.author }}</a>
-              <small class="text-muted">{{ post.date_posted | date:"j E, Y G:i" }}</small>
-            </div>
-            <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
-{#            <p class="article-content">{{ post.content }}</p>#}
-          </div>
-        </article>
-    {% endfor %}
+{% for post in posts %}
+<article class="media content-section" style="word-wrap: break-word;">
+  <div class="col-md-12 media-body">
+    <div class="article-metadata">
+      <a class="mr-2" href="{% url 'users:user' post.author.id %}">{{ post.author }}</a>
+      <small class="text-muted">{{ post.date_posted | date:"j E, Y G:i" }}</small>
+    </div>
+    <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
+  </div>
+</article>
+{% endfor %}
 {% endblock content %}
 
 {% block options %}
 <form action="{% url 'blog-home' %}" method="GET" id="sorting_form">
-<div class="row d-flex justify-content-between align-items-end mb-3">
+  <div class="row col-md-12 d-flex justify-content-between align-items-end mb-3">
     <div>
       <label class="text-muted" for="{{ form.ascending_order.id_for_label }}">{{ form.ascending_order.label }}</label>
       {{ form.ascending_order }}
     </div>
     <div>
-      {{ form.search_pattern }}
+      {{ form.title }}
+      {{ form.author }}
       <input type="submit" value="Szukaj"><br>
-      <div class="d-flex flex-nowrap justify-content-center align-items-center mt-1 text-muted">
-        <div class="pr-2">Wyszukuj po:</div>
-        <div class="font-search">
-          {{ form.search_title }}Tytule<br>
-          {{ form.search_author }}Autorze
-        </div>
-      </div>
     </div>
-</div>
+  </div>
 </form>
 {% endblock options %}
 
 {% block custom_scripts %}
 <script>
-    $(function() {
-        $('#{{ form.ascending_order.auto_id }}').on('change', function() {
-            $('#sorting_form').submit();
-        });
-    })
+  $(function () {
+    $('#{{ form.ascending_order.auto_id }}').on('change', function () {
+      $('#sorting_form').submit();
+    });
+  })
 </script>
 {% endblock custom_scripts %}
-
-{#TODO: przetlumaczyc na polski#}
